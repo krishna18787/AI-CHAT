@@ -6,7 +6,7 @@ function Chat() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "👋 Hello! I'm your AI assistant. How can I help you today?"
+      content: "👋 Hello Krishna! I'm your AI assistant. How can I help you today?"
     }
   ]);
 
@@ -113,7 +113,7 @@ function Chat() {
           background: "#f8f8f8"
         }}
       >
-        Krishna AI Chat
+        Krish AI Chat
       </div>
 
       {/* Messages */}

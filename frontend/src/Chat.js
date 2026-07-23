@@ -41,7 +41,7 @@ function Chat() {
     try {
 
       const response = await axios.post(
-        "http://localhost:8000/chat",
+        "https://ai-chat-production-dce0.up.railway.app",
         {
           prompt: userPrompt
         }

@@ -10,7 +10,7 @@ function Chat() {
     }
   ]);
 
-  
+  console.log("Messages:", messages);
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
 

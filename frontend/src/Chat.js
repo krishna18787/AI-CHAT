@@ -10,6 +10,7 @@ function Chat() {
     }
   ]);
 
+  
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
-import { API_BASE_URL, MOCK_RESPONSE_API_URL } from "./apiConfig";
+import { CHAT_API_URL, MOCK_RESPONSE_API_URL } from "./apiConfig";
 
 const DEFAULT_MOCK_JSON = {
   success: true,
@@ -265,7 +265,7 @@ function MockJsonService() {
             lineHeight: 1.6,
           }}
         >
-          API Base URL: <code>{API_BASE_URL}</code>
+          API Base URL: <code>{CHAT_API_URL}</code>
         </p>
       </div>
     </div>

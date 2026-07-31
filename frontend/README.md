@@ -2,6 +2,15 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Project configuration
+
+Set `REACT_APP_API_BASE_URL` to point both frontend services at a different backend. The app derives:
+
+- `GET/POST /chat` for Open AI Chat
+- `GET/POST /mock-response` for Post Mock Json
+
+If `REACT_APP_API_BASE_URL` is not set, the app uses the current Railway backend URL by default.
+
 ## Available Scripts
 
 In the project directory, you can run:

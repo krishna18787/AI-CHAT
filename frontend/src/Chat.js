@@ -1,10 +1,7 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
-
-const CHAT_API_URL =
-  process.env.REACT_APP_CHAT_API_URL ||
-  "https://krishna-ai-chat.up.railway.app/chat";
+import { CHAT_API_URL } from "./apiConfig";
 
 function Chat() {
   const [messages, setMessages] = useState([
@@ -52,11 +49,17 @@ function Chat() {
         }
       );
 
+      const assistantReply =
+        response.data?.answer ??
+        (typeof response.data === "object"
+          ? JSON.stringify(response.data, null, 2)
+          : String(response.data));
+
       setMessages(prev => [
         ...prev,
         {
           role: "assistant",
-          content: response.data.answer
+          content: assistantReply
         }
       ]);
 

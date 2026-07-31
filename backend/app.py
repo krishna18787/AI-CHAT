@@ -1,7 +1,8 @@
 import os
+from typing import Any
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAI
 from pydantic import BaseModel
@@ -44,6 +45,8 @@ STATIC_MOCK_RESPONSE = {
     },
 }
 
+mock_response_store: Any = STATIC_MOCK_RESPONSE
+
 
 @app.get("/health")
 def health():
@@ -51,8 +54,27 @@ def health():
 
 
 @app.api_route("/mock-response", methods=["GET", "POST"])
-def mock_response():
-    return STATIC_MOCK_RESPONSE
+async def mock_response(request: Request):
+    global mock_response_store
+
+    if request.method == "POST":
+        try:
+            payload = await request.json()
+        except Exception as exc:
+            raise HTTPException(
+                status_code=400,
+                detail="Request body must be valid JSON.",
+            ) from exc
+
+        is_frontend_chat_request = (
+            isinstance(payload, dict)
+            and set(payload.keys()) == {"prompt"}
+        )
+
+        if not is_frontend_chat_request:
+            mock_response_store = payload
+
+    return mock_response_store
 
 
 @app.post("/chat")

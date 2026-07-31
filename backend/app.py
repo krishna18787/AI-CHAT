@@ -1,16 +1,22 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from openai import OpenAI
-from dotenv import load_dotenv
 import os
+
+from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from openai import OpenAI
+from pydantic import BaseModel
 
 load_dotenv()
 
-client = OpenAI(
-    api_key=os.getenv("GROQ_API_KEY"),
-    base_url="https://api.groq.com/openai/v1"
-)
+groq_api_key = os.getenv("GROQ_API_KEY")
+client = None
+
+if groq_api_key:
+    client = OpenAI(
+        api_key=groq_api_key,
+        base_url="https://api.groq.com/openai/v1",
+    )
+
 app = FastAPI()
 
 app.add_middleware(
@@ -23,8 +29,39 @@ app.add_middleware(
 class ChatRequest(BaseModel):
     prompt: str
 
+
+STATIC_MOCK_RESPONSE = {
+    "success": True,
+    "message": "Mock response for testing.",
+    "answer": "This is a static mock response. Use this endpoint to validate hosting, networking, and frontend integration.",
+    "data": {
+        "environment": "mock",
+        "items": [
+            {"id": 1, "name": "alpha", "active": True},
+            {"id": 2, "name": "beta", "active": False},
+            {"id": 3, "name": "gamma", "active": True},
+        ],
+    },
+}
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "service": "ai-chat-backend"}
+
+
+@app.api_route("/mock-response", methods=["GET", "POST"])
+def mock_response():
+    return STATIC_MOCK_RESPONSE
+
+
 @app.post("/chat")
 def chat(request: ChatRequest):
+    if client is None:
+        raise HTTPException(
+            status_code=503,
+            detail="GROQ_API_KEY is not configured.",
+        )
 
     response = client.responses.create(
         model="llama-3.3-70b-versatile",

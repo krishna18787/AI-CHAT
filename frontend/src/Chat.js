@@ -2,6 +2,10 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 
+const CHAT_API_URL =
+  process.env.REACT_APP_CHAT_API_URL ||
+  "https://krishna-ai-chat.up.railway.app/chat";
+
 function Chat() {
   const [messages, setMessages] = useState([
     {
@@ -42,7 +46,7 @@ function Chat() {
     try {
 
       const response = await axios.post(
-        "https://krishna-ai-chat.up.railway.app/chat",
+        CHAT_API_URL,
         {
           prompt: userPrompt
         }
